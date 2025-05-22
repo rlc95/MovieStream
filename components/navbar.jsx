@@ -9,7 +9,7 @@ export default function Navbar({ search, onSearchChange }) {
     <nav className="bg-gradient-to-r from-blue-800 to-indigo-800/60 shadow-md px-4 py-3 sticky top-0 z-50">
       < div className="container mx-auto flex flex-wrap items-center justify-between">
         {/* Logo / Brand */}
-        < div className="text-white text-xl font-bold">🎬 MVStream</div>
+        < div className="text-white text-xl font-bold">🎬 RLCflix</div>
 
         {/* Mobile Menu Icon */}
         <button
