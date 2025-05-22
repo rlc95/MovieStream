@@ -1,0 +1,36 @@
+@import "nprogress/nprogress.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+
+
+/* Custom NProgress styles */
+#nprogress .bar {
+  background: #2563eb;
+  height: 3px;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px #2563eb, 0 0 5px #2563eb;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    --background: #ffffff;
+    --foreground: #171717;
+  }
+
+  body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+}
