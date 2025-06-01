@@ -178,7 +178,7 @@ export default function Home() {
 
                         <div className="text-sm">
                           <Badge
-                            variant="success"
+                            variant="default"
                             className="font-medium cursor-pointer"
                             onClick={() => trailer_movie(movie)}
                           >
