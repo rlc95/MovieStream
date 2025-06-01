@@ -25,6 +25,9 @@ export default function Home() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const limit = 8;
+  const [trailerUrl, setTrailerUrl] = useState(null);
+  const [trailerOpen, setTrailerOpen] = useState(false);
+
 
   // Fetch movies (paginated, optionally filtered)
   useEffect(() => {
@@ -67,7 +70,67 @@ export default function Home() {
     document.body.removeChild(link);
   };
 
+  const trailer_movie = async (movie) => {
+    const title = movie.title;
+    const year = movie.year;
+  
+    try {
+      const res = await fetch("/api/trailer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, year }),
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok && data.videoUrl) {
+        setTrailerUrl(data.videoUrl);
+        setTrailerOpen(true);
+      } else {
+        alert("Trailer not found.");
+      }
+    } catch (error) {
+      console.error("Error fetching trailer:", error);
+      alert("Something went wrong fetching the trailer.");
+    }
+  };
+  
+
   return (
+
+    <>
+
+    {trailerOpen && trailerUrl && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity duration-300">
+        <div
+          className="bg-white rounded-lg w-[90%] sm:w-[85%] md:w-[80%] lg:w-3/4 xl:max-w-3xl max-h-[90vh] overflow-hidden shadow-xl transform transition-all scale-95 animate-fadeIn"
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setTrailerOpen(false)}
+            className="absolute top-2 right-2 text-white text-2xl font-bold z-10"
+          >
+            &times;
+          </button>
+
+          {/* Responsive Video Container */}
+          <div className="relative w-full pt-[56.25%]">
+            <iframe
+              src={trailerUrl}
+              title="Trailer"
+              allowFullScreen
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              className="absolute top-0 left-0 w-full h-full rounded-b-lg"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    )}
+
+  
+
     <main className="h-full w-full overflow-y-auto max-h-[800px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-200 hover:scrollbar-thumb-gray-800">
       <div className="container space-y-6 my-12 z-20 pb-32">
         <Navbar search={search} onSearchChange={handleSearchChange} />
@@ -111,6 +174,18 @@ export default function Home() {
                         <div className="text-sm text-blue-900 font-semibold">
                           {movie?.genres?.join(" / ")}
                         </div>
+
+
+                        <div className="text-sm">
+                          <Badge
+                            variant="success"
+                            className="font-medium cursor-pointer"
+                            onClick={() => trailer_movie(movie)}
+                          >
+                            Watch Trailer
+                          </Badge>
+                        </div>
+
                         <div className="flex flex-row justify-between items-center">
                           <Badge variant="success" className="font-medium">
                             Rated: {movie?.rated ?? "N/A"}
@@ -163,5 +238,7 @@ export default function Home() {
         )}
       </div>
     </main>
+
+    </>
   );
 }
